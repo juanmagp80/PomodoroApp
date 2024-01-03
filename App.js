@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   Button,
   SafeAreaView,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import Header from "./src/components/Header/Header";
 import Timer from "./src/components/Timer/Timer";
@@ -19,6 +20,36 @@ export default function App() {
   const [time, setTime] = useState(25 * 60);
   const [currentColor, setCurrentColor] = useState(0);
   const [currentTime, setCurrentTime] = useState("POMO" | "SHORT" | "BREAK");
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setTime(time - 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    if (time === 0) {
+      setIsActive(false);
+      setIsWorking((prev) => !prev);
+      setTime(isWorking ? 300 : 1500);
+      playSound();
+    }
+    return () => clearInterval(interval);
+  }, [isActive, time]);
+
+  function handleStartStop() {
+    setIsActive(!isActive);
+  }
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("./assets/button-click-off-click.mp3")
+    );
+
+    await sound.playAsync();
+  }
 
   return (
     <SafeAreaView
@@ -39,6 +70,11 @@ export default function App() {
           time={time}
         />
         <Timer style={styles.time} time={time} />
+        <TouchableOpacity onPress={handleStartStop} style={styles.Button}>
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            {isActive ? "Pause" : "Start"}
+          </Text>
+        </TouchableOpacity>
         <StatusBar style="auto" />
       </View>
     </SafeAreaView>
@@ -46,6 +82,13 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  Button: {
+    backgroundColor: "#333333",
+    alignItems: "center",
+    borderRadius: 15,
+    padding: 15,
+    marginTop: 15,
+  },
   container: {
     padding: 20,
     flex: 1,
