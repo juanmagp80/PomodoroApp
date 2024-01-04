@@ -4,22 +4,20 @@
     "slug": "pomodoro",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/1000_F_557882137_80atspmcF03jZdbNWCpJQdvFH1zW0rsR.jpeg",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/kisspng-pomodoro-technique-timer-android-pomodoro-5b3f47a30dcae8.9130394315308737630565.jpg",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.example.pomodoro"
@@ -31,6 +29,21 @@
       "eas": {
         "projectId": "b7731f27-6edf-4784-9f59-1dcf358de022"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.0"
+          }
+        }
+      ]
+    ]
   }
 }
